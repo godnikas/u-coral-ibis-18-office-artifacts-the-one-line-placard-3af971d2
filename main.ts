@@ -15,15 +15,17 @@ const PLACARD =
 
 function main(): void {
   const line = PLACARD.trim();
+  // Count code points, not UTF-16 units, like the scorer does.
+  const chars = [...line].length;
 
   // Gate: the entry must be 1-180 characters and not only whitespace.
-  if (line.length === 0) {
+  if (chars === 0) {
     console.error("error: placard is empty or only whitespace");
     process.exit(1);
   }
-  if (line.length > 180) {
+  if (chars > 180) {
     console.error(
-      `error: placard is ${line.length} characters, over the 180 limit`,
+      `error: placard is ${chars} characters, over the 180 limit`,
     );
     process.exit(1);
   }
@@ -37,7 +39,7 @@ function main(): void {
   mkdirSync(outputDir, { recursive: true });
   const outputFile = join(outputDir, "entry.txt");
   writeFileSync(outputFile, line, "utf8");
-  console.log(`wrote ${line.length} characters to ${outputFile}`);
+  console.log(`wrote ${chars} characters to ${outputFile}`);
 }
 
 main();
